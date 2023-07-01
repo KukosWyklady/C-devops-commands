@@ -39,6 +39,50 @@ xanalyze:
 clang_tidy_analyze:
 	clang-tidy -checks=bugprone-*,clang-analyzer-*,cert-*,concurrency-*,misc-*,modernize-*,performance-*,readability-* --extra-arg=-I. *.c --
 
+sanitizer_address:
+	clang *.c -o main.out -I./ -fsanitize=address  -g
+	./main.out
+
+sanitizer_thread:
+	clang *.c -o main.out -I./ -fsanitize=thread  -g
+	./main.out
+
+sanitizer_memory:
+	clang *.c -o main.out -I./ -fsanitize=memory  -g
+	./main.out
+
+sanitizer_ub:
+	clang *.c -o main.out -I./ -fsanitize=undefined  -g
+	./main.out
+
+sanitizer_dataflow:
+	clang *.c -o main.out -I./ -fsanitize=dataflow  -g
+	./main.out
+
+sanitizer_controlflow:
+	clang *.c -o main.out -I./ -fsanitize=cfi -fvisibility=hidden  -g -flto
+	./main.out
+
+sanitizer_stack:
+	clang *.c -o main.out -I./ -fsanitize=safe-stack  -g
+	./main.out
+
+sanitizer:
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_address --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_thread --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_memory --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_ub --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_dataflow --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_controlflow --no-print-directory
+	$(MAKE) clean --no-print-directory
+	$(MAKE) sanitizer_stack --no-print-directory
+
 clean:
 	rm -rf main.out
 	rm -rf *.txt
